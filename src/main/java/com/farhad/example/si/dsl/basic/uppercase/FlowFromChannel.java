@@ -1,5 +1,7 @@
 package com.farhad.example.si.dsl.basic.uppercase;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +15,43 @@ import org.springframework.messaging.SubscribableChannel;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @Bean
+ * public MessageChannel queueChannel() {
+ *     return MessageChannels.queue().get();
+ * }
+ * 
+ * @Bean
+ * public MessageChannel publishSubscribe() {
+ *     return MessageChannels.publishSubscribe().get();
+ * }
+ * 
+ * @Bean
+ * public IntegrationFlow channelFlow() {
+ *     return IntegrationFlow.from("input")
+ *                 .fixedSubscriberChannel()
+ *                 .channel("queueChannel")
+ *                 .channel(publishSubscribe())
+ *                 .channel(MessageChannels.executor("executorChannel", this.taskExecutor))
+ *                 .channel("output")
+ *                 .get();
+ * }
+ * 
+ *  - from("input") means "'find and use the MessageChannel with the "input" id, or create one'".
+ *  - fixedSubscriberChannel() produces an instance of FixedSubscriberChannel and registers it with a name of 
+ *    channelFlow.channel#0.
+ *  - channel("queueChannel") works the same way but uses an existing queueChannel bean.
+ *  - channel(publishSubscribe()) is the bean-method reference.
+ *  - channel(MessageChannels.executor("executorChannel", this.taskExecutor)) is the IntegrationFlowBuilder that exposes 
+ *    IntegrationComponentSpec to the ExecutorChannel and registers it as executorChannel.
+ *  - channel("output") registers the DirectChannel bean with output as its name, as long as no beans with this name 
+ *    already exist.
+ * 
+ */
 @Configuration
 @Slf4j
-public class Flow {
+public class FlowFromChannel {
     
     @Bean
     public SubscribableChannel output() {
@@ -63,5 +99,7 @@ public class Flow {
 
         };
     } 
+
+
     
 }
