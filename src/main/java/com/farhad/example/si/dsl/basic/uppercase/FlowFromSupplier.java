@@ -14,7 +14,7 @@ import com.github.javafaker.Faker;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Configuration
+// @Configuration
 @Slf4j
 public class FlowFromSupplier {
     
